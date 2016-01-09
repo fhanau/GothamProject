@@ -2,9 +2,9 @@
 Java sort algorithms
 
 Algorithmen:
-Quicksort
+Quicksort done
 Linear
 Binär
 Bubblesort
-Bogosort/Monkeysort
+Bogosort/Monkeysort done
 Insertionsort
