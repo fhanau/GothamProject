@@ -7,4 +7,4 @@ Linear
 Binär
 Bubblesort
 Bogosort/Monkeysort done
-Insertionsort
+Insertionsort done

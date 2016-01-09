@@ -4,6 +4,15 @@ import java.util.Random;
 
 public class Sorters{
 
+  int[] getRandomArray(int len){
+    int[] arr = new int[len];
+    Random rn = new Random();
+    for (int i = 0; i < len; len++) {
+      arr[len] = rn.nextInt();
+    }
+    return arr;
+  }
+
   //Debugfunktion, die überprüft, ob das array wirklich sortiert ist. Die Laufzeit wird zur Zeit zurückgegeben, was man optional
   //  als Vergleichswert mit den Sortieralgorithmen zeigen könnte.
   long verify(int[] array){
@@ -54,11 +63,28 @@ public class Sorters{
   long bogosort(int[] array){
     long start = System.nanoTime();
     int len = array.length;
-    
+
     while(verifybool(array) != true && (System.nanoTime() - start < 5000000000L)){
       shuffle(array);
     }
 
+    long stop = System.nanoTime();
+    return stop - start;
+  }
+
+  //Performs Insertionsort
+  long insertionsort(int[] array){
+    long start = System.nanoTime();
+
+    int len = array.length;
+    for(int i = 0; i < len; i++){
+      int temp = array[i];
+      int pos = i;
+      while(pos > 0 && temp < array[pos - 1]){
+        pos--;
+      }
+      array[pos] = temp;
+    }
     long stop = System.nanoTime();
     return stop - start;
   }
