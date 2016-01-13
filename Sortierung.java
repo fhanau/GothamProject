@@ -6,22 +6,30 @@ public class Sortierung extends Frame {
   
   private Button bNewArray = new Button();
   private Button bQuickSort = new Button();                                                                                                                                                                                                                                                                        
-  private Button bBinaryTree = new Button();                                                                                                                                                                                                                                                     
+  private Button bInsertionSort = new Button();                                                                                                                                                                                                                                                     
   private Button bBubbleSort = new Button();
-  private Button bGnomeSort = new Button();                                                                                                                                                                                                                                           
+  private Button bGnomeSort = new Button();    
+  private Button bBogoSort = new Button(); 
+  private Button bCountingSort = new Button();                                                                                                                                                                                                                                        
   private Label lStatusQuickSort = new Label();
   private Label lStatusGnomeSort = new Label();
   private Label lStatusBubbleSort = new Label();
-  private Label lStatusBinaryTree = new Label();
+  private Label lStatusInsertionSort = new Label();
+  private Label lStatusBogoSort = new Label();
+  private Label lStatusCountingSort = new Label();
   private Label lQuickSort = new Label();
   private Label lGnomeSort = new Label();
   private Label lBubbleSort = new Label();
-  private Label lBinaryTree = new Label();
+  private Label lInsertionSort = new Label();
+  private Label lBogoSort = new Label();
+  private Label lCountingSort = new Label();
   public int[] array;
   public int[] arrayQuickSort;
-  public int[] arrayBinaryTree;
+  public int[] arrayInsertionSort;
   public int[] arrayBubbleSort;
   public int[] arrayGnomeSort;
+  public int[] arrayBogoSort;
+  public int[] arrayCountingSort;
   private Label lLaenge = new Label();
   private NumberField nfArrayLength = new NumberField();
   private List list = new List();
@@ -29,7 +37,9 @@ public class Sortierung extends Frame {
   private Label lDauer = new Label();
   private Choice cArrayTyp = new Choice();
   private Label lArt = new Label();
+  private Checkbox cntcheck = new Checkbox("F\u00FCr CountingSort optimiert");
   
+  int readyforcountingsort = 0;
   //Hilfsfunktioen
   
   //Wandelt Nanosekunden um in Zeitangabe, z.B. 5036 -> "5,036us"
@@ -39,19 +49,7 @@ public class Sortierung extends Frame {
   }
   
   //Ueberprueft, ob das Array sortiert ist.
-  void pruefen(int[] array){
-    int len = array.length;
-    for(int i = 0; i < len - 1; i++){
-      //Das sollte nicht passieren...
-      if (array[i] > array[i + 1]){
-        break;
-      }
-    }
-  }
-  
-  
-  //Ueberprueft, ob das Array sortiert ist und gibt das Ergebnis zurueck.
-  boolean pruefenBool(int[] array){
+  boolean pruefen(int[] array){
     int len = array.length;
     for(int i = 0; i < len - 1; i++){
       if (array[i] > array[i + 1]){
@@ -83,19 +81,43 @@ public class Sortierung extends Frame {
     return array;
   }
   
+  //Erzeugt ein Array und fuellt es mit zufaelligen Werten <= 255.
+  int[] getRandomArraycnt(int len){
+    int[] array = new int[len];
+    Random rn = new Random();
+    for (int i = 0; i < len; len++) {
+      array[i] = rn.nextInt(255);
+    }
+    return array;
+  }
+  
   //ALGORITHMEN
   
   //Implementiert Bogosort: Die Werte werden so lange zufaellig gemischt, bis sie sortiert sind. Komplexitaet O(n * n!). Bricht nach 5 Sekunden ab.
   void bogosort(int[] array){
     long start = System.nanoTime();
-    while(pruefenBool(array) != true && (System.nanoTime() - start < 5000000000L)){
+    while(pruefen(array) != true && (System.nanoTime() - start < 5000000000L)){
       schuetteln(array);
     }
   }
   
-  //Implementiert Insertionsort: Dabei wird einem leeren Array immer ein Wert hinzugefuegt, der dann an die passende Position bewegt wird. Komplexitaet O(n^2).
+  //Implementiert Insertionsort: Dabei wird einem leeren Array immer ein Wert hinzugefuegt, der dann an die passede Position bewegt wird. Komplexitaet O(n^2).
   void insertionsort(int[] array){
-    int len = array.length;
+    
+     int len = array.length;
+    for(int i = 1; i < len; i++){
+      int j = i;
+      while(j > 0 && array[j - 1] > array[j]){
+        int temp = array[j];
+        array[j] = array[j - 1];
+        array[j - 1] = temp;
+        j--;
+      }
+    }
+    
+    
+    
+    /*int len = array.length;
     for(int i = 0; i < len; i++){
       int temp = array[i];
       int pos = i;
@@ -103,7 +125,7 @@ public class Sortierung extends Frame {
         pos--;
       }
       array[pos] = temp;
-    }
+    }   */
   }
   
   //Implementiert Countingsort: Funktioniert in dieser Implementierung nur bei natuerlichen Zahlen <= 255. Zaehlt, wie oft jeder moegliche Wert vorkommt und schreibt dann jeden dieser Werte mit der jeweiligen Haeufigkeit zurueck in das Array. Komplexitaet O(n + 256)
@@ -127,42 +149,22 @@ public class Sortierung extends Frame {
   
   //Fuer quicksort
   static int teile(int[] array, int links, int rechts) {       //Funktion von links und rechts wie erstes und letztes bei quicksort()
-    int i = links;
-    // Starte mit j links vom Pivotelement
-    int j = rechts - 1;
+    int i = links - 1;
     int pivot = array[rechts];
-    
-    do {
-      // Suche von links ein Element, welches groesser als das Pivotelement ist
-      while (array[i] <= pivot && i < rechts) {
-        i = i + 1;
-      }
-      
-      // Suche von rechts ein Element, welches kleiner als das Pivotelement ist
-      while (array[j] >= pivot && j > links) {
-        j = j - 1;
-      }
-      
-      if (i < j) {
+                       
+    for (int j = links; j < rechts; j++) {
+      if (array[j] <= pivot) {
+        i++;
         int x=array[i];
         array[i]=array[j];
         array[j]=x;
-        //tausche array[i] mit array[j]
       }
-    } while (i < j); // end of do-while  // solange i an j nicht vorbeigelaufen ist 
-    
-    // Tausche Pivotelement (array[rechts]) mit neuer endgueltiger Position (array[i])
-    
-    if (array[i] > pivot) {
-      int x=array[i];
-      array[i]=array[rechts];
-      array[rechts]=x;
-      //tausche array[i] mit array[rechts]
     }
+    int x=array[i + 1];
+    array[i + 1]=array[rechts];
+    array[rechts]=x;
     
-    // gib die Position des Pivotelements zurueck
-    
-    return i;
+    return i + 1;
   }
   
   void quicksort(int[] array, int erstes, int letztes){ //erstes ist der Index des ersten Elements der (Teil-)Liste, letztes der Index des letzten
@@ -179,9 +181,7 @@ public class Sortierung extends Frame {
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent evt) { dispose(); }
     });
-    int frameWidth = 705; 
-    int frameHeight = 501;
-    setSize(frameWidth, frameHeight);  
+    setSize(625, 500);  
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
     int x = (d.width - getSize().width) / 2;
     int y = (d.height - getSize().height) / 2;
@@ -210,14 +210,14 @@ public class Sortierung extends Frame {
       }
     });
     cp.add(bQuickSort);
-    bBinaryTree.setBounds(368, 192, 75, 25);
-    bBinaryTree.setLabel("sortieren");
-    bBinaryTree.addActionListener(new ActionListener() { 
+    bInsertionSort.setBounds(368, 192, 75, 25);
+    bInsertionSort.setLabel("sortieren");
+    bInsertionSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
         bBinaryTree_ActionPerformed(evt);
       }
     });
-    cp.add(bBinaryTree);
+    cp.add(bInsertionSort);
     bBubbleSort.setBounds(368, 232, 75, 25);
     bBubbleSort.setLabel("sortieren");
     bBubbleSort.addActionListener(new ActionListener() { 
@@ -234,18 +234,44 @@ public class Sortierung extends Frame {
       }
     });
     cp.add(bGnomeSort);
+    
+    bBogoSort.setBounds(368, 312, 75, 25);
+    bBogoSort.setLabel("sortieren");
+    bBogoSort.addActionListener(new ActionListener() { 
+      public void actionPerformed(ActionEvent evt) { 
+        bBogoSort_ActionPerformed(evt);
+      }
+    });
+    cp.add(bBogoSort);
+    
+    bCountingSort.setBounds(368, 352, 75, 25);
+    bCountingSort.setLabel("sortieren");
+    bCountingSort.addActionListener(new ActionListener() { 
+      public void actionPerformed(ActionEvent evt) { 
+        bCountingSort_ActionPerformed(evt);
+      }
+    });
+    cp.add(bCountingSort);
+    
+    
     lStatusQuickSort.setBounds(240, 152, 110, 20);
-    lStatusQuickSort.setText("unknown");
+    lStatusQuickSort.setText("?");
     cp.add(lStatusQuickSort);
     lStatusGnomeSort.setBounds(240, 272, 110, 20);
-    lStatusGnomeSort.setText("unknown");
+    lStatusGnomeSort.setText("?");
     cp.add(lStatusGnomeSort);
     lStatusBubbleSort.setBounds(240, 232, 110, 20);
-    lStatusBubbleSort.setText("unknown");
+    lStatusBubbleSort.setText("?");
     cp.add(lStatusBubbleSort);
-    lStatusBinaryTree.setBounds(240, 192, 110, 20);
-    lStatusBinaryTree.setText("unknown");
-    cp.add(lStatusBinaryTree);
+    lStatusInsertionSort.setBounds(240, 192, 110, 20);
+    lStatusInsertionSort.setText("?");
+    cp.add(lStatusInsertionSort);
+    lStatusBogoSort.setBounds(240, 312, 110, 20);
+    lStatusBogoSort.setText("?");
+    cp.add(lStatusBogoSort);
+    lStatusCountingSort.setBounds(240, 352, 110, 20);
+    lStatusCountingSort.setText("?");
+    cp.add(lStatusCountingSort);
     lQuickSort.setBounds(112, 152, 110, 20);
     lQuickSort.setText("QuickSort");
     cp.add(lQuickSort);
@@ -255,14 +281,21 @@ public class Sortierung extends Frame {
     lBubbleSort.setBounds(112, 232, 110, 20);
     lBubbleSort.setText("BubbleSort");
     cp.add(lBubbleSort);
-    lBinaryTree.setBounds(112, 192, 110, 20);
-    lBinaryTree.setText("Binary-Tree");
-    cp.add(lBinaryTree);
+    lInsertionSort.setBounds(112, 192, 110, 20);
+    lInsertionSort.setText("InsertionSort");
+    cp.add(lInsertionSort);
+    lBogoSort.setBounds(112, 312, 110, 20);
+    lBogoSort.setText("BogoSort");
+    cp.add(lBogoSort);
+    lCountingSort.setBounds(112, 352, 110, 20);
+    lCountingSort.setText("CountingSort");
+    cp.add(lCountingSort);
+    
     lLaenge.setBounds(112, 40, 110, 20);
     lLaenge.setText("L\u00E4nge des Arrays");
     cp.add(lLaenge);
     nfArrayLength.setBounds(240, 40, 107, 20);
-    nfArrayLength.setText("");
+    nfArrayLength.setText("10000");
     cp.add(nfArrayLength);
     
     lDauer.setBounds(240, 112, 110, 20);
@@ -277,19 +310,35 @@ public class Sortierung extends Frame {
     cArrayTyp.add("sortiert");
     cArrayTyp.add("r\u00FCckw\u00E4rts sortiert");
     
+    cntcheck.setBounds(112, 55, 180, 50);
+    cp.add(cntcheck);
+    
+    //Sortierung ist erst mit erstelltem Array moeglich
+    bQuickSort.setEnabled(false);
+    bBogoSort.setEnabled(false);
+    bInsertionSort.setEnabled(false);
+    bGnomeSort.setEnabled(false);
+    bCountingSort.setEnabled(false);
+    bBubbleSort.setEnabled(false);
+        
+        
     setVisible(true);
   }
   
   public void resetLabels() {
     lStatusQuickSort.setBackground(Color.white);
-    lStatusBinaryTree.setBackground(Color.white);
+    lStatusInsertionSort.setBackground(Color.white);
     lStatusBubbleSort.setBackground(Color.white);
     lStatusGnomeSort.setBackground(Color.white);
+    lStatusBogoSort.setBackground(Color.white);
+    lStatusCountingSort.setBackground(Color.white);
     
-    lStatusQuickSort.setText("unknown");
-    lStatusBinaryTree.setText("unknown");
-    lStatusBubbleSort.setText("unknown");
-    lStatusGnomeSort.setText("unknown");
+    lStatusQuickSort.setText("?");
+    lStatusInsertionSort.setText("?");
+    lStatusBubbleSort.setText("?");
+    lStatusGnomeSort.setText("?");
+    lStatusBogoSort.setText("?");
+    lStatusCountingSort.setText("?");
   }
   
   public void turnArray(){               //Umdrehen durch Dreieckstaeusche
@@ -301,6 +350,7 @@ public class Sortierung extends Frame {
   }
   
   public void bNewArray_ActionPerformed(ActionEvent evt) {
+    readyforcountingsort = cntcheck.getState() ? 1 : 0;
     int length;
     if (nfArrayLength.getInt()!=0) {
       length = nfArrayLength.getInt();
@@ -309,21 +359,31 @@ public class Sortierung extends Frame {
       length = 10000;
     }
     
-    array = getRandomArray(length);
+    array = readyforcountingsort == 1 ? getRandomArraycnt(length) : getRandomArray(length);
     
     if (cArrayTyp.getSelectedItem() != "zuf\u00E4llig") {     //wenn das Array sortiert sein soll, wird es sortiert.
-      //FELIX: Hier muss bitte einmal ein Sortierverfahren eingefuegt werden, ich waere fuer QuickSort.
+      quicksort(array, 0, length - 1);
       
       if (cArrayTyp.getSelectedItem().equals("r\u00FCckw\u00E4rts sortiert")) {  //bei "rueckwaerts sortiert" wird das bereits sortierte Array umgedreht.
         turnArray();
       }
     }
     arrayQuickSort=array.clone();
-    arrayBinaryTree=array.clone();
+    arrayInsertionSort=array.clone();
     arrayBubbleSort=array.clone();
+    arrayBogoSort=array.clone();
+    arrayCountingSort=array.clone();
     arrayGnomeSort=array.clone();   //damit alle Sortierverfahren nacheinander ein Array sortieren koennen, wird das Array fuer jedes Verfahren dupliziert.
     
     resetLabels();
+    
+    bQuickSort.setEnabled(true);
+    bBogoSort.setEnabled(true);
+    bInsertionSort.setEnabled(true);
+    bGnomeSort.setEnabled(true);
+    bCountingSort.setEnabled(readyforcountingsort == 1 ? true : false);
+    bBubbleSort.setEnabled(true);
+    
     nfArrayLength.setBackground(Color.green);
   }
   
@@ -336,10 +396,10 @@ public class Sortierung extends Frame {
     long stop = System.nanoTime();   //Stopzeitpunkt ermitteln
     
     String time=timestring(stop - start);   //timestring() gibt Differenz zwischen stop und start als String aus 
-        if (pruefenBool(arrayQuickSort) != true) {
+    if (pruefen(arrayQuickSort) != true) {
       time = "error";
     }
-    //FELIX: String timestring(int time) muss oben implementiert werden.
+    
     lStatusQuickSort.setBackground(Color.green);
     lStatusQuickSort.setText(time);  //Dauer anzeigen
   }
@@ -347,18 +407,16 @@ public class Sortierung extends Frame {
   public void bBinaryTree_ActionPerformed(ActionEvent evt) {
     long start = System.nanoTime();
     
-    //FELIX: Nicht direkt Quellcode einfuegen, sondern besser Methode aufrufen.
-    
-    insertionsort(arrayBinaryTree);
+    insertionsort(arrayInsertionSort);
     
     long stop = System.nanoTime();
-    
+
     String time = timestring(stop - start);   //wie oben
-    if (pruefenBool(arrayBinaryTree) != true) {
+    if (pruefen(arrayInsertionSort) != true) {
       time = "error";
     }
-    lStatusBinaryTree.setBackground(Color.green);
-    lStatusBinaryTree.setText(time);
+    lStatusInsertionSort.setBackground(Color.green);
+    lStatusInsertionSort.setText(time);
   }
   
   public void bBubbleSort_ActionPerformed(ActionEvent evt) {
@@ -383,7 +441,31 @@ public class Sortierung extends Frame {
     lStatusGnomeSort.setText(time);
   }
   
-  //FELIX: Bitte bei weiteren Sortierverfahren die neuen GUI-Teile nach demselben Muster benennen! Ja, Sir!
+    public void bBogoSort_ActionPerformed(ActionEvent evt) {
+    long start = System.nanoTime();
+    bogosort(arrayBogoSort);
+    long stop = System.nanoTime();
+    
+    String time=timestring(stop - start);//wie oben
+    if (pruefen(arrayInsertionSort) != true) {
+      time = "mehr als 5s";
+    }
+    lStatusBogoSort.setBackground(Color.green);
+    lStatusBogoSort.setText(time);
+  }
+  
+    public void bCountingSort_ActionPerformed(ActionEvent evt) {
+    long start = System.nanoTime();
+    countingsort(arrayCountingSort);
+    long stop = System.nanoTime();
+    
+    String time=timestring(stop - start);//wie oben
+    if (pruefen(arrayInsertionSort) != true) {
+      time = "error";
+    }
+    lStatusCountingSort.setBackground(Color.green);
+    lStatusCountingSort.setText(time);
+  }
   
   public static void main(String[] args) {
     new Sortierung("Gotham Project - Lukas, Malou, Tobias und Felix");
