@@ -4,49 +4,50 @@ import java.util.Random;
 
 //Lukas, Malou, Tobias, Felix
 public class Sortierung extends Frame {
-  
-  Button bNewArray = new Button();
-  Button bQuickSort = new Button();                                                                                                                                                                                                                                                                        
-  Button bInsertionSort = new Button();                                                                                                                                                                                                                                                     
-  Button bBubbleSort = new Button();
-  Button bGnomeSort = new Button();    
-  Button bBogoSort = new Button();  
-  Button bStoogeSort = new Button();
-  Button bSelectionSort = new Button();  
-  Button bShakerSort = new Button();  
-  Button bCountingSort = new Button();                                                                                                                                                                                                                                     
-  Label lStatusQuickSort = new Label();
-  Label lStatusGnomeSort = new Label();
-  Label lStatusBubbleSort = new Label();
-  Label lStatusInsertionSort = new Label();
-  Label lStatusBogoSort = new Label();
-  Label lStatusCountingSort = new Label();
-  Label lStatusStoogeSort = new Label();
-  Label lStatusShakerSort = new Label();
-  Label lStatusSelectionSort = new Label();
-  Label lQuickSort = new Label();
-  Label lGnomeSort = new Label();
-  Label lBubbleSort = new Label();
-  Label lInsertionSort = new Label();
-  Label lBogoSort = new Label();
-  Label lStoogeSort = new Label();
-  Label lSelectionSort = new Label();
-  Label lShakerSort = new Label();
-  Label lCountingSort = new Label();
+  Button bNewArray = new Button("Neues Array");
+  Button bQuickSort = new Button("sortieren");                                                                                                                                                                                                                                                                        
+  Button bInsertionSort = new Button("sortieren");                                                                                                                                                                                                                                                     
+  Button bBubbleSort = new Button("sortieren");
+  Button bGnomeSort = new Button("sortieren");    
+  Button bBogoSort = new Button("sortieren");  
+  Button bStoogeSort = new Button("sortieren");
+  Button bSelectionSort = new Button("sortieren");  
+  Button bShakerSort = new Button("sortieren");  
+  Button bCountingSort = new Button("sortieren"); 
+  Button bBtree = new Button("sortieren");                                                                                                                                                                                                                                    
+  Label lStatusQuickSort = new Label("?");
+  Label lStatusGnomeSort = new Label("?");
+  Label lStatusBubbleSort = new Label("?");
+  Label lStatusInsertionSort = new Label("?");
+  Label lStatusBogoSort = new Label("?");
+  Label lStatusCountingSort = new Label("?");
+  Label lStatusStoogeSort = new Label("?");
+  Label lStatusShakerSort = new Label("?");
+  Label lStatusSelectionSort = new Label("?");
+  Label lStatusBtree = new Label("?");
+  Label lQuickSort = new Label("QuickSort");
+  Label lGnomeSort = new Label("GnomeSort");
+  Label lBubbleSort = new Label("BubbleSort");
+  Label lInsertionSort = new Label("InsertionSort");
+  Label lBogoSort = new Label("BogoSort");
+  Label lStoogeSort = new Label("StoogeSort");
+  Label lSelectionSort = new Label("SelectionSort");
+  Label lShakerSort = new Label("ShakerSort");
+  Label lCountingSort = new Label("CountingSort");
+  Label lBtree = new Label("Binary Tree Sort");
   int[] array;
-  Label lLaenge = new Label();
+  Label lLaenge = new Label("L\u00E4nge des Arrays");
   NumberField nfArrayLength = new NumberField();
   List list = new List();
-  
-  Label lDauer = new Label();
+  Label lDauer = new Label("Dauer");
   Choice cArrayTyp = new Choice();
-  Label lArt = new Label();
+  Label lArt = new Label("Art des Arrays");
   Checkbox cntcheck = new Checkbox("F\u00FCr CountingSort optimiert");
   
   //Countingsort braucht spezielle Arrays
-  int readyforcountingsort = 0;
+  boolean readyforcountingsort = false;
   
-  //Hilfsfunktioen
+  //Hilfsfunktionen
   
   //Wandelt Nanosekunden um in Zeitangabe, z.B. 5036 -> "5,036us"
   String timestring(long time){
@@ -139,7 +140,7 @@ public class Sortierung extends Frame {
   //Implementiert Bogosort: Die Werte werden so lange zufaellig gemischt, bis sie sortiert sind. Komplexitaet O(n * n!). Bricht nach 5 Sekunden ab.
   void bogosort(int[] array){
     long start = System.nanoTime();
-    while(pruefen(array) != true && (System.nanoTime() - start < 5000000000L)){
+    while(!pruefen(array) && (System.nanoTime() - start < 5000000000L)){
       schuetteln(array);
     }
   }
@@ -296,8 +297,8 @@ public class Sortierung extends Frame {
       
     } while (x!=0); //Solange noch Aenderungen stattfinden (also die Reihenfolge nicht endgueltig ist), wird obiges wiederholt
   }
-    //SoogeSort teilt das Array mehrmals in Drittel auf. Zuerst sortiert es die ersten zwei Drittel der Liste, diese Liste wird dann erneut gedrittelt.
-    //Die letzten zwei Drittel werden sortiert, danach die ersten zwei Drittel. 
+  //SoogeSort teilt das Array mehrmals in Drittel auf. Zuerst sortiert es die ersten zwei Drittel der Liste, diese Liste wird dann erneut gedrittelt.
+  //Die letzten zwei Drittel werden sortiert, danach die ersten zwei Drittel. 
   public static void stoogeSort(int[] array, int i, int j) {
     if (array[j] < array[i]) {                  //Das lettzte und erste Element wird getauscht, falls das erste größer als das letzet ist.
       int tmp = array[i];
@@ -313,8 +314,8 @@ public class Sortierung extends Frame {
   }
   
   //GUI
-  Sortierung(String title) { 
-    super(title);
+  Sortierung() { 
+    super("Gotham Project - Lukas, Malou, Tobias und Felix");
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent evt) { dispose(); }
     });
@@ -328,163 +329,141 @@ public class Sortierung extends Frame {
     add(cp);
     
     bNewArray.setBounds(392, 40, 75, 25);
-    bNewArray.setLabel("Neues Array");
     bNewArray.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bNewArray_ActionPerformed(evt);
+        bNewArray_ActionPerformed();
       }
     });
     cp.add(bNewArray);
     
-    enableEvents(AWTEvent.MOUSE_EVENT_MASK);
-    
     
     bQuickSort.setBounds(368, 152, 75, 25);
-    bQuickSort.setLabel("sortieren");
     bQuickSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bQuickSort_ActionPerformed(evt);
+        bQuickSort_ActionPerformed();
       }
     });
     cp.add(bQuickSort);
     bInsertionSort.setBounds(368, 192, 75, 25);
-    bInsertionSort.setLabel("sortieren");
     bInsertionSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bInsertionSort_ActionPerformed(evt);
+        bInsertionSort_ActionPerformed();
       }
     });
     cp.add(bInsertionSort);
     bBubbleSort.setBounds(368, 232, 75, 25);
-    bBubbleSort.setLabel("sortieren");
     bBubbleSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bBubbleSort_ActionPerformed(evt);
+        bBubbleSort_ActionPerformed();
       }
     });
     cp.add(bBubbleSort);
     bGnomeSort.setBounds(368, 272, 75, 25);
-    bGnomeSort.setLabel("sortieren");
     bGnomeSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bGnomeSort_ActionPerformed(evt);
+        bGnomeSort_ActionPerformed();
       }
     });
     cp.add(bGnomeSort);
     
     bBogoSort.setBounds(368, 312, 75, 25);
-    bBogoSort.setLabel("sortieren");
     bBogoSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bBogoSort_ActionPerformed(evt);
+        bBogoSort_ActionPerformed();
       }
     });
     cp.add(bBogoSort);
     
     bCountingSort.setBounds(368, 472, 75, 25);
-    bCountingSort.setLabel("sortieren");
     bCountingSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bCountingSort_ActionPerformed(evt);
+        bCountingSort_ActionPerformed();
       }
     });
     cp.add(bCountingSort);
     bStoogeSort.setBounds(368, 352, 75, 25);
-    bStoogeSort.setLabel("sortieren");
     bStoogeSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bStoogeSort_ActionPerformed(evt);
+        bStoogeSort_ActionPerformed();
       }
     });    
     cp.add(bShakerSort);
     bShakerSort.setBounds(368, 432, 75, 25);
-    bShakerSort.setLabel("sortieren");
     bShakerSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bShakerSort_ActionPerformed(evt);
+        bShakerSort_ActionPerformed();
       }
     });
     cp.add(bStoogeSort);
     bSelectionSort.setBounds(368, 392, 75, 25);
-    bSelectionSort.setLabel("sortieren");
     bSelectionSort.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        bSelectionSort_ActionPerformed(evt);
+        bSelectionSort_ActionPerformed();
       }
     });
     cp.add(bSelectionSort);
     
+    bBtree.setBounds(368, 512, 75, 25);
+    bBtree.addActionListener(new ActionListener() { 
+      public void actionPerformed(ActionEvent evt) { 
+        bBtreeSort_ActionPerformed();
+      }
+    });
+    cp.add(bBtree);
     
     lStatusQuickSort.setBounds(240, 152, 110, 20);
-    lStatusQuickSort.setText("?");
     cp.add(lStatusQuickSort);
     lStatusGnomeSort.setBounds(240, 272, 110, 20);
-    lStatusGnomeSort.setText("?");
     cp.add(lStatusGnomeSort);
     lStatusBubbleSort.setBounds(240, 232, 110, 20);
-    lStatusBubbleSort.setText("?");
     cp.add(lStatusBubbleSort);
     lStatusInsertionSort.setBounds(240, 192, 110, 20);
-    lStatusInsertionSort.setText("?");
     cp.add(lStatusInsertionSort);
     lStatusBogoSort.setBounds(240, 312, 110, 20);
-    lStatusBogoSort.setText("?");
     cp.add(lStatusBogoSort);
     lStatusStoogeSort.setBounds(240, 352, 110, 20);
-    lStatusStoogeSort.setText("?");
     cp.add(lStatusStoogeSort);      
     lStatusSelectionSort.setBounds(240, 392, 110, 20);
-    lStatusSelectionSort.setText("?");
     cp.add(lStatusSelectionSort);    
     lStatusShakerSort.setBounds(240, 432, 110, 20);
-    lStatusShakerSort.setText("?");
     cp.add(lStatusShakerSort);        
     lStatusCountingSort.setBounds(240, 472, 110, 20);
-    lStatusCountingSort.setText("?");
     cp.add(lStatusCountingSort);
+    lStatusBtree.setBounds(240, 512, 110, 20);
+    cp.add(lStatusBtree);
     lQuickSort.setBounds(112, 152, 110, 20);
-    lQuickSort.setText("QuickSort");
     cp.add(lQuickSort);
     lGnomeSort.setBounds(112, 272, 110, 20);
-    lGnomeSort.setText("GnomeSort");
     cp.add(lGnomeSort);
     lBubbleSort.setBounds(112, 232, 110, 20);
-    lBubbleSort.setText("BubbleSort");
     cp.add(lBubbleSort);
     lInsertionSort.setBounds(112, 192, 110, 20);
-    lInsertionSort.setText("InsertionSort");
     cp.add(lInsertionSort);
     lBogoSort.setBounds(112, 312, 110, 20);
-    lBogoSort.setText("BogoSort");
     cp.add(lBogoSort);
     lStoogeSort.setBounds(112, 352, 110, 20);
-    lStoogeSort.setText("StoogeSort");
     cp.add(lStoogeSort);
     lSelectionSort.setBounds(112, 392, 110, 20);
-    lSelectionSort.setText("SelectionSort");
     cp.add(lSelectionSort);
     lShakerSort.setBounds(112, 432, 110, 20);
-    lShakerSort.setText("ShakerSort");
     cp.add(lShakerSort);
     lCountingSort.setBounds(112, 472, 110, 20);
-    lCountingSort.setText("CountingSort");
     cp.add(lCountingSort);
+    lBtree.setBounds(112, 512, 110, 20);
+    cp.add(lBtree);
     
     
     lLaenge.setBounds(112, 40, 110, 20);
-    lLaenge.setText("L\u00E4nge des Arrays");
     cp.add(lLaenge);
     nfArrayLength.setBounds(240, 40, 107, 20);
     nfArrayLength.setText("1000");
     cp.add(nfArrayLength);
     
     lDauer.setBounds(240, 112, 110, 20);
-    lDauer.setText("Dauer:");
     cp.add(lDauer);
     cArrayTyp.setBounds(240, 16, 150, 20);
     cp.add(cArrayTyp);
     lArt.setBounds(112, 16, 110, 20);
-    lArt.setText("Art des Arrays");
     cp.add(lArt);
     cArrayTyp.add("zuf\u00E4llig");
     cArrayTyp.add("sortiert");
@@ -503,6 +482,7 @@ public class Sortierung extends Frame {
     bStoogeSort.setEnabled(false);
     bShakerSort.setEnabled(false);
     bSelectionSort.setEnabled(false);
+    bBtree.setEnabled(false);
     
     
     setVisible(true);
@@ -519,6 +499,7 @@ public class Sortierung extends Frame {
     lStatusShakerSort.setBackground(Color.white);
     lStatusStoogeSort.setBackground(Color.white);
     lStatusSelectionSort.setBackground(Color.white);
+    lStatusBtree.setBackground(Color.white);
     
     lStatusQuickSort.setText("?");
     lStatusInsertionSort.setText("?");
@@ -529,6 +510,7 @@ public class Sortierung extends Frame {
     lStatusStoogeSort.setText("?");
     lStatusShakerSort.setText("?");
     lStatusSelectionSort.setText("?");
+    lStatusBtree.setText("?");
   }
   
   void turnArray(){               //Umdrehen durch Dreieckstaeusche
@@ -539,8 +521,8 @@ public class Sortierung extends Frame {
     }
   }
   
-  public void bNewArray_ActionPerformed(ActionEvent evt) {
-    readyforcountingsort = cntcheck.getState() ? 1 : 0;
+  public void bNewArray_ActionPerformed() {
+    readyforcountingsort = cntcheck.getState();
     int length;
     if (nfArrayLength.getInt()!=0) {
       length = nfArrayLength.getInt();
@@ -549,7 +531,7 @@ public class Sortierung extends Frame {
       length = 1000;
     }
     
-    array = readyforcountingsort == 1 ? getRandomArrayCnt(length) : getRandomArray(length);
+    array = readyforcountingsort ? getRandomArrayCnt(length) : getRandomArray(length);
     
     if (cArrayTyp.getSelectedItem() != "zuf\u00E4llig") {     //wenn das Array sortiert sein soll, wird es sortiert.
       quicksort(array, 0, length - 1);
@@ -567,14 +549,15 @@ public class Sortierung extends Frame {
     bGnomeSort.setEnabled(true);
     bStoogeSort.setEnabled(true);
     bSelectionSort.setEnabled(true);
-    bCountingSort.setEnabled(readyforcountingsort == 1 ? true : false);//Der Nutzer darf nur bei einem kompatiblen array countingsort einsetzen.
+    bCountingSort.setEnabled(readyforcountingsort);//Der Nutzer darf nur bei einem kompatiblen array countingsort einsetzen.
     bBubbleSort.setEnabled(true);
     bShakerSort.setEnabled(true);
+    bBtree.setEnabled(true);
     
     nfArrayLength.setBackground(Color.green);
   }
   
-  public void bQuickSort_ActionPerformed(ActionEvent evt) { 
+  public void bQuickSort_ActionPerformed() { 
     int[] arrayQuickSort=array.clone();     //damit alle Sortierverfahren nacheinander ein Array sortieren koennen, wird das Array fuer jedes Verfahren dupliziert.
     long start = System.nanoTime();    //Startzeitpunkt ermitteln
     
@@ -591,7 +574,7 @@ public class Sortierung extends Frame {
     lStatusQuickSort.setText(time);  //Dauer anzeigen
   }
   
-  public void bInsertionSort_ActionPerformed(ActionEvent evt) { 
+  public void bInsertionSort_ActionPerformed() { 
     int[] arrayInsertionSort=array.clone();
     
     long start = System.nanoTime();
@@ -608,9 +591,8 @@ public class Sortierung extends Frame {
     lStatusInsertionSort.setText(time);
   }
   
-  public void bBubbleSort_ActionPerformed(ActionEvent evt) { 
+  public void bBubbleSort_ActionPerformed() { 
     int[] arrayBubbleSort=array.clone();
-    //arrayBubbleSort[5] = arrayBubbleSort[6] = 5;
     long start = System.nanoTime();
     
     bubbleSort(arrayBubbleSort);
@@ -625,7 +607,7 @@ public class Sortierung extends Frame {
     lStatusBubbleSort.setText(time);
   }
   
-  public void bGnomeSort_ActionPerformed(ActionEvent evt) {
+  public void bGnomeSort_ActionPerformed() {
     int[] arrayGnomeSort=array.clone(); 
     long start = System.nanoTime();
     gnomeSort(arrayGnomeSort);
@@ -641,7 +623,7 @@ public class Sortierung extends Frame {
     lStatusGnomeSort.setText(time);
   }
   
-  public void bBogoSort_ActionPerformed(ActionEvent evt) {  
+  public void bBogoSort_ActionPerformed() {  
     int[] arrayBogoSort=array.clone();
     long start = System.nanoTime();
     bogosort(arrayBogoSort);
@@ -658,7 +640,7 @@ public class Sortierung extends Frame {
     lStatusBogoSort.setText(time);
   }
   
-  public void bCountingSort_ActionPerformed(ActionEvent evt) {   
+  public void bCountingSort_ActionPerformed() {   
     int[] arrayCountingSort=array.clone();
     long start = System.nanoTime();
     countingsort(arrayCountingSort);
@@ -672,7 +654,7 @@ public class Sortierung extends Frame {
     lStatusCountingSort.setText(time);
   }
   
-  public void bSelectionSort_ActionPerformed(ActionEvent evt) {   
+  public void bSelectionSort_ActionPerformed() {   
     int[] arraySelectionSort=array.clone();
     long start = System.nanoTime();
     selectionsort(arraySelectionSort);
@@ -686,7 +668,7 @@ public class Sortierung extends Frame {
     lStatusSelectionSort.setText(time);
   }
   
-  public void bStoogeSort_ActionPerformed(ActionEvent evt) {   
+  public void bStoogeSort_ActionPerformed() {   
     int[] arrayStoogeSort=array.clone();
     long start = System.nanoTime();
     stoogeSort(arrayStoogeSort, 0, arrayStoogeSort.length - 1);
@@ -700,7 +682,7 @@ public class Sortierung extends Frame {
     lStatusStoogeSort.setText(time);
   }
   
-  public void bShakerSort_ActionPerformed(ActionEvent evt) {   
+  public void bShakerSort_ActionPerformed() {   
     int[] arrayShakerSort=array.clone();
     long start = System.nanoTime();
     shakerSort(arrayShakerSort);
@@ -714,8 +696,21 @@ public class Sortierung extends Frame {
     lStatusShakerSort.setText(time);
   }
   
-  public static void main(String[] args) {
-    new Sortierung("Gotham Project - Lukas, Malou, Tobias und Felix");
+  public void bBtreeSort_ActionPerformed() {   
+    int[] arrayBtree=array.clone();
+    long start = System.nanoTime();
+    BinBaum bin = new BinBaum();
+    for(int i = 0; i < arrayBtree.length; i++){
+      bin.insert(arrayBtree[i]);
+    }
+    bin.printtoarray(arrayBtree, 0);
+    long stop = System.nanoTime();
+    
+    lStatusBtree.setBackground(Color.green);
+    lStatusBtree.setText(pruefen(arrayBtree) ? timestring(stop - start) : "error");
   }
   
+  public static void main(String[] args) {
+    new Sortierung();
+  }
 }
