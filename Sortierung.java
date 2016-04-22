@@ -37,7 +37,7 @@ public class Sortierung extends Frame {
   Label lBtree = new Label("Binary Tree Sort");
   int[] array;
   Label lLaenge = new Label("L\u00E4nge des Arrays");
-  NumberField nfArrayLength = new NumberField();
+  TextField nfArrayLength = new TextField("1000");
   List list = new List();
   Label lDauer = new Label("Dauer");
   Choice cArrayTyp = new Choice();
@@ -92,7 +92,7 @@ public class Sortierung extends Frame {
       if ( array[index - 1] <= array[index] ) {     //Wenn die Zahlen richtig sortiert sind, geht man eins weiter
         ++index; 
       } else {                     
-        int tempVal = array[index];                 //Vertauscht die groeﬂere und kleinere Zahl
+        int tempVal = array[index];                 //Vertauscht die groessere und kleinere Zahl
         array[index] = array[index - 1]; 
         array[index - 1] = tempVal; 
         --index;                                    //geht zurueck, um die eben vertauschte Zahl mit der nun davor zu vergleichen
@@ -185,7 +185,7 @@ public class Sortierung extends Frame {
     int pivot = array[rechts];       
     
     do {
-      // naechstes Element von links, das groeﬂer als das Pivotelement ist, wird bestimmt
+      // naechstes Element von links, das groesser als das Pivotelement ist, wird bestimmt
       while (array[i] <= pivot && i < rechts) {
         i = i + 1;
       }
@@ -202,7 +202,7 @@ public class Sortierung extends Frame {
       }
     } while (i < j); // wird wiederholt bis i und j aneinander vorbeigelaufen sind 
     
-    // array[i] (sollte groeﬂer als das Pivotelement sein, aber zur Sicherheit Ueberpruefung) wird mit dem Pivotelement array[rechts] getauscht
+    // array[i] (sollte groesser als das Pivotelement sein, aber zur Sicherheit Ueberpruefung) wird mit dem Pivotelement array[rechts] getauscht
     if (array[i] > pivot) {
       int x=array[i];
       array[i]=array[rechts];
@@ -266,7 +266,7 @@ public class Sortierung extends Frame {
     int x=0; //Variable fuer Anzahl der aenderungen im Durchlauf
     int y=0; //Variable fuer Anzahl der Durchlaeufe
     int sortAnfang=0;
-    int sortEnde=0; //Variablen fuer endgueltig positioniert Variablen am Anfang und Ende, nach jedem Durchlauf kommt bei der jeweiligen Variable 1 dazu, da die groeﬂte bzw. kleinste Zahl komplett durchgereicht wird
+    int sortEnde=0; //Variablen fuer endgueltig positioniert Variablen am Anfang und Ende, nach jedem Durchlauf kommt bei der jeweiligen Variable 1 dazu, da die groesste bzw. kleinste Zahl komplett durchgereicht wird
     
     do {
       x=0;     //Anzahl der aenderungen im Array zurueckgesetzt
@@ -300,7 +300,7 @@ public class Sortierung extends Frame {
   //SoogeSort teilt das Array mehrmals in Drittel auf. Zuerst sortiert es die ersten zwei Drittel der Liste, diese Liste wird dann erneut gedrittelt.
   //Die letzten zwei Drittel werden sortiert, danach die ersten zwei Drittel. 
   public static void stoogeSort(int[] array, int i, int j) {
-    if (array[j] < array[i]) {                  //Das lettzte und erste Element wird getauscht, falls das erste grˆﬂer als das letzet ist.
+    if (array[j] < array[i]) {                  //Das letzte und erste Element wird getauscht, falls das erste groesser als das letzte ist.
       int tmp = array[i];
       array[i] = array[j];
       array[j] = tmp;
@@ -456,7 +456,6 @@ public class Sortierung extends Frame {
     lLaenge.setBounds(112, 40, 110, 20);
     cp.add(lLaenge);
     nfArrayLength.setBounds(240, 40, 107, 20);
-    nfArrayLength.setText("1000");
     cp.add(nfArrayLength);
     
     lDauer.setBounds(240, 112, 110, 20);
@@ -488,7 +487,7 @@ public class Sortierung extends Frame {
     setVisible(true);
   }
   
-  //Setzt die Oberfl‰che nach Erzeugung eines neuen Arrays zur¸ck.
+  //Setzt die Oberflaeche nach Erzeugung eines neuen Arrays zurueck.
   public void resetLabels() {
     lStatusQuickSort.setBackground(Color.white);
     lStatusInsertionSort.setBackground(Color.white);
@@ -524,8 +523,11 @@ public class Sortierung extends Frame {
   public void bNewArray_ActionPerformed() {
     readyforcountingsort = cntcheck.getState();
     int length;
-    if (nfArrayLength.getInt()!=0) {
-      length = nfArrayLength.getInt();
+    Double d = new Double(nfArrayLength.getText());
+    int field = d.intValue();
+
+    if (field!=0) {
+      length = field;
     }
     else {
       length = 1000;
@@ -597,8 +599,8 @@ public class Sortierung extends Frame {
     
     bubbleSort(arrayBubbleSort);
     long stop = System.nanoTime();
-    
-    
+
+
     String time = timestring(stop - start); //wie oben
     if (pruefen(arrayBubbleSort) != true) {
       time = "error";
@@ -611,7 +613,7 @@ public class Sortierung extends Frame {
     int[] arrayGnomeSort=array.clone(); 
     long start = System.nanoTime();
     gnomeSort(arrayGnomeSort);
-    
+
     
     long stop = System.nanoTime();
     
@@ -661,7 +663,7 @@ public class Sortierung extends Frame {
     long stop = System.nanoTime();
     
     String time=timestring(stop - start);//wie oben
-    if (pruefen(arraySelectionSort) != true) {
+    if (!pruefen(arraySelectionSort)) {
       time = "error";
     }
     lStatusSelectionSort.setBackground(Color.green);
